@@ -1,0 +1,22 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Login to GHCR
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+
+    - name: Build and Push the Github Runner Docker image for XP Self-Hosted Runners
+      run: |
+        docker build . --file cicd/Dockerfile_github_runner --platform linux/arm64 --tag ghcr.io/${{ github.repository_owner }}/xp_github_runner:latest
+        docker push ghcr.io/${{ github.repository_owner }}/xp_github_runner:latest
