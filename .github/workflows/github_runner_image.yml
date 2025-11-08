@@ -17,5 +17,5 @@ jobs:
 
     - name: Build and Push the Github Runner Docker image for XP Self-Hosted Runners
       run: |
-        docker build . --file cicd/Dockerfile_github_runner --tag ghcr.io/${{ github.repository_owner }}/xp_github_runner:latest
+        docker build . --file cicd/Dockerfile_github_runner --platform linux/arm64 --tag ghcr.io/${{ github.repository_owner }}/xp_github_runner:latest
         docker push ghcr.io/${{ github.repository_owner }}/xp_github_runner:latest
