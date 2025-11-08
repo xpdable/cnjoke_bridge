@@ -7,8 +7,8 @@ import httpx
 
 app = FastAPI(title="Get a Chunk Norris Jokes :)")
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 base_random_joke_url = "https://api.chucknorris.io/jokes/random"
 
 @app.get("/", response_class=HTMLResponse)
