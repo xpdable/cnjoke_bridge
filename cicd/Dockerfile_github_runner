@@ -1,24 +1,23 @@
-# Dockerfile - self-hosted runner (arm64/M1)
-FROM ubuntu:22.04
+# Dockerfile - Fully containerized GitHub self-hosted runner (Alpine ARM64)
+FROM --platform=linux/arm64 alpine:3.18
 
+# Set timezone (optional)
 ENV TZ=Europe/Berlin
 
-# Base
-RUN apt-get update && apt-get install -y \
+# Install basic dependencies
+RUN apk add --no-cache \
+    bash \
     curl \
     git \
     sudo \
     python3 \
-    python3-pip \
-    python3-venv \
+    py3-pip \
+    py3-virtualenv \
     unzip \
     jq \
     podman \
-    docker.io \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Ansible
-RUN pip3 install --no-cache-dir ansible
+    docker-cli \
+    && pip3 install --no-cache-dir ansible
 
 # Install kubectl (arm64)
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" \
@@ -26,13 +25,13 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     && mv kubectl /usr/local/bin/
 
 # Create runner user
-RUN useradd -m runner && echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN adduser -D runner && echo "runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER runner
 WORKDIR /home/runner
 
-# Downlod GitHub Runner (arm64)
+# Download GitHub Runner (arm64)
 RUN curl -o actions-runner-linux-arm64.tar.gz -L https://github.com/actions/runner/releases/download/v2.313.0/actions-runner-linux-arm64-2.313.0.tar.gz \
     && tar xzf actions-runner-linux-arm64.tar.gz
 
-# Runner Entry Point
+# Container entrypoint
 ENTRYPOINT ["./run.sh"]
