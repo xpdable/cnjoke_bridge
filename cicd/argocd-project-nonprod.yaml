@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: xp-cnjoke-app
+  name: xp-cnjoke-app-nonprod
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/xpdable/cnjoke_bridge.git
     targetRevision: main
-    path: k8s_deployment
+    path: k8s_deployment/nonprod
   destination:
     server: https://kubernetes.default.svc
-    namespace: xp
+    namespace: xp-nonprod
 #  syncPolicy:
 #    automated:
 #      prune: true

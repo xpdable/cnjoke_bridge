@@ -1,0 +1,77 @@
+# webapp-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: xp-cnjoke-service
+  namespace: xp-nonprod
+spec:
+  selector:
+    app: xp-cnjoke
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
+
+---
+# nginx-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: xp-nonprod
+data:
+  default.conf: |
+    server {
+        listen 80;
+        location / {
+            proxy_pass http://xp-cnjoke-service:8000;
+        }
+    }
+
+---
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-proxy
+  namespace: xp-nonprod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+
+---
+# nginx-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-proxy
+  namespace: xp-nonprod
+spec:
+  selector:
+    app: nginx-proxy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort  # Kind 环境可用 NodePort 访问
+

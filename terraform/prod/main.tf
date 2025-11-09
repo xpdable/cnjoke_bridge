@@ -14,7 +14,7 @@ provider "kind" {
 # To configure the cluster for nginx's ingress controller based on kind's docs
 # https://kind.sigs.k8s.io/docs/user/ingress/:
 resource "kind_cluster" "default" {
-  name           = "cnjoke-cluster"
+  name           = "cnjoke-cluster-prod"
   wait_for_ready = true
 
   kind_config {

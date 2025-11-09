@@ -1,4 +1,4 @@
-name: 'Simply Deploy Application with kubectl'
+name: [CD]Simply Deploy Application with kubectl
 
 on:
   workflow_dispatch:

@@ -1,0 +1,81 @@
+name: [CD][Prod]Deploy Kind Cluster, ArgoCD, and Application
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version tag (optional). If empty, value from version.txt will be used'
+        required: false
+        default: ''
+
+env:
+  TERRAFORM_DIR: terraform/prod
+  APP_NAMESPACE: xp-prod
+  ARGOCD_NAMESPACE: argocd
+
+jobs:
+  deploy:
+    name: 'Terraform'
+    runs-on: [ self-hosted, ARM64, macOS ]
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Delete existing Kind cluster
+      run: kind delete cluster --name cnjoke-cluster || true
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform -chdir=$TERRAFORM_DIR init
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      run: terraform -chdir=$TERRAFORM_DIR fmt -check
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform -chdir=$TERRAFORM_DIR plan -input=false
+
+    - name: Terraform Apply
+      run: terraform -chdir=$TERRAFORM_DIR apply -auto-approve -input=false
+
+    - name: Init Kind Cluster
+      run: kubectl config use-context kind-cnjoke-cluster
+
+    - name: Create ghcr.io secret
+      run: |
+        kubectl create namespace $APP_NAMESPACE || true
+        kubectl -n $APP_NAMESPACE create secret docker-registry ghcr-secret \
+          --docker-server=ghcr.io \
+          --docker-username=${{ github.repository_owner }} \
+          --docker-password=${{ secrets.GHCR_TOKEN }} \
+          --docker-email=none \
+
+    - name: Install argocd
+      run: |
+        helm repo add argo https://argoproj.github.io/argo-helm
+        helm repo update
+        helm install argocd argo/argo-cd -n argocd --create-namespace
+
+#    - name: Inject Version into app-deployment
+#      run: |
+#        DEFAULT_VERSION=$(cat version.txt)
+#        if [[ -n "${{ github.event.inputs.version }}" ]]; then
+#          VERSION="${{ github.event.inputs.version }}"
+#        else
+#          VERSION=$DEFAULT_VERSION
+#        fi
+#        echo "Using version: $VERSION"
+#        jinja2 k8s_deployment/app-deployment.yaml.j2 -D version=$VERSION > k8s_deployment/app-deployment.yaml
+#        echo $(cat k8s_deployment/app-deployment.yaml)
+
+    - name: Deploy Application CD pipeline in argocd
+      run: |
+        kubectl apply -f cicd/argocd-project-prod.yaml
