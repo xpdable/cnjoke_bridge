@@ -1,4 +1,4 @@
-name: [CD][Non-Prod]Deploy Kind Cluster, ArgoCD, and Application
+name: "[CD][Non-Prod]Deploy Kind Cluster, ArgoCD, and Application"
 
 on:
   workflow_dispatch:

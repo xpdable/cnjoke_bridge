@@ -1,4 +1,4 @@
-name: [CI]Github Runner Docker Image Build
+name: "[CI]Github Runner Docker Image Build"
 on:
   workflow_dispatch:
 
