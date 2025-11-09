@@ -24,6 +24,7 @@ spec:
       containers:
         - name: xp-cnjoke
           image: ghcr.io/xpdable/xp_cnjoke:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           readinessProbe:
