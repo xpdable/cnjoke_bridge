@@ -99,7 +99,6 @@ jobs:
 
     - name: Install argocd
       run: |
-        kubectl create namespace $ARGOCD_NAMESPACE || true
-        kubectl -n $ARGOCD_NAMESPACE apply -k https://github.com/argoproj/argo-cd/blob/master/manifests/namespace-install.yaml
-        
-    
+        helm repo add argo https://argoproj.github.io/argo-helm
+        helm repo update
+        helm install argocd argo/argo-cd -n argocd --create-namespace
