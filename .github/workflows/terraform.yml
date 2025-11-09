@@ -117,7 +117,6 @@ jobs:
           VERSION=$DEFAULT_VERSION
         fi
         echo "Using version: $VERSION"
-        rm k8s_deployment/app-deployment.yaml
         jinja2 k8s_deployment/app-deployment.yaml.j2 -D version=$VERSION > k8s_deployment/app-deployment.yaml
 
     - name: Deploy Application CD pipeline in argocd
