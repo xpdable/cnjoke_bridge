@@ -1,0 +1,47 @@
+name: 'Simply Deploy Application with kubectl'
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version tag (optional). If empty, value from version.txt will be used'
+        required: false
+        default: ''
+
+env:
+  APP_NAMESPACE: xp
+
+jobs:
+  deploy:
+    name: 'deploy'
+    runs-on: [ self-hosted, ARM64, macOS ]
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Inject Version into app-deployment
+      run: |
+        DEFAULT_VERSION=$(cat version.txt)
+        if [[ -n "${{ github.event.inputs.version }}" ]]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION=$DEFAULT_VERSION
+        fi
+        echo "Using version: $VERSION"
+        jinja2 k8s_deployment/app-deployment.yaml.j2 -D version=$VERSION > k8s_deployment/app-deployment.yaml
+        echo $(cat k8s_deployment/app-deployment.yaml)
+
+    - name: Deploy Application to Kubernetes Cluster
+      run: |
+        kubectl create namespace $APP_NAMESPACE || true
+        kubectl -n $APP_NAMESPACE delete -f k8s_deployment/app-deployment.yaml || true
+        kubectl -n $APP_NAMESPACE delete -f k8s_deployment/nginx-deployment.yaml || true
+        kubectl -n $APP_NAMESPACE apply -f k8s_deployment/app-deployment.yaml
+        kubectl -n $APP_NAMESPACE apply -f k8s_deployment/nginx-deployment.yaml
