@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: xp-cnjoke-integration-test
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: integration-test
+          image: ghcr.io/xpdable/xp_cnjoke-test:latest
+          env:
+            - name: BASE_URL
+              value: http://xp-cnjoke.xp-prod.svc.cluster.local:8000
+      restartPolicy: Never
+  backoffLimit: 1
