@@ -108,17 +108,17 @@ jobs:
         helm repo update
         helm install argocd argo/argo-cd -n argocd --create-namespace
 
-    - name: Inject Version into app-deployment
-      run: |
-        DEFAULT_VERSION=$(cat version.txt)
-        if [[ -n "${{ github.event.inputs.version }}" ]]; then
-          VERSION="${{ github.event.inputs.version }}"
-        else
-          VERSION=$DEFAULT_VERSION
-        fi
-        echo "Using version: $VERSION"
-        jinja2 k8s_deployment/app-deployment.yaml.j2 -D version=$VERSION > k8s_deployment/app-deployment.yaml
-        echo $(cat k8s_deployment/app-deployment.yaml)
+#    - name: Inject Version into app-deployment
+#      run: |
+#        DEFAULT_VERSION=$(cat version.txt)
+#        if [[ -n "${{ github.event.inputs.version }}" ]]; then
+#          VERSION="${{ github.event.inputs.version }}"
+#        else
+#          VERSION=$DEFAULT_VERSION
+#        fi
+#        echo "Using version: $VERSION"
+#        jinja2 k8s_deployment/app-deployment.yaml.j2 -D version=$VERSION > k8s_deployment/app-deployment.yaml
+#        echo $(cat k8s_deployment/app-deployment.yaml)
 
     - name: Deploy Application CD pipeline in argocd
       run: |
