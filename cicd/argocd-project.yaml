@@ -4,7 +4,7 @@ metadata:
   name: xp-cnjoke-app
   namespace: argocd
 spec:
-  project: default
+  project: xp-cnjoke-app
   source:
     repoURL: https://github.com/xpdable/cnjoke_bridge.git
     targetRevision: main
@@ -13,6 +13,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: xp
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+#    automated:
+#      prune: true
+#      selfHeal: true
