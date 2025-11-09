@@ -100,6 +100,6 @@ jobs:
     - name: Install argocd
       run: |
         kubectl create namespace $ARGOCD_NAMESPACE || true
-        kubectl -n $ARGOCD_NAMESPACE apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stable
+        kubectl -n $ARGOCD_NAMESPACE apply -k https://github.com/argoproj/argo-cd/blob/master/manifests/namespace-install.yaml
         
     
