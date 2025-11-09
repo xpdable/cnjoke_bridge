@@ -86,7 +86,7 @@ jobs:
       run: terraform -chdir=$TERRAFORM_DIR apply -auto-approve -input=false
 
     - name: Init Kind Cluster
-      run: kubectl config use-context cnjoke-cluster
+      run: kubectl config use-context kind-cnjoke-cluster
 
     - name: Create ghcr.io secret
       run: |
