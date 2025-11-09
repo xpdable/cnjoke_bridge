@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: foo-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: xp-cnjoke
+  ports:
+    - port: 31009
+      targetPort: 8000
