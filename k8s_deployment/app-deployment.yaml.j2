@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xp-cnj-deployment
+  labels:
+    app: xp-cnj-deployment
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: xp-cnjoke
+  template:
+    metadata:
+      labels:
+        app: xp-cnjoke
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: xp-cnjoke
+          image: ghcr.io/xpdable/xp_cnjoke:{{ version }}
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
