@@ -6,7 +6,7 @@ metadata:
   namespace: xp-nonprod
 spec:
   selector:
-    app: xp-cnjoke
+    app.kubernetes.io/name: xp-cnjoke
   ports:
     - protocol: TCP
       port: 8000

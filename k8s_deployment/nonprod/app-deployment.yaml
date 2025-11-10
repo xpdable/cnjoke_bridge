@@ -3,7 +3,11 @@ kind: Deployment
 metadata:
   name: xp-cnj-deployment
   labels:
-    app: xp-cnj-deployment
+    app.kubernetes.io/name: xp-cnj-deployment
+    app.kubernetes.io/version: 0.0.3
+    app.kubernetes.io/environment: nonprod
+  annotations:
+    app-version: 0.0.3
 spec:
   replicas: 3
   strategy:
@@ -17,7 +21,9 @@ spec:
   template:
     metadata:
       labels:
-        app: xp-cnjoke
+        app.kubernetes.io/name: xp-cnjoke
+        app.kubernetes.io/version: 0.0.3
+        app.kubernetes.io/environment: nonprod
     spec:
       imagePullSecrets:
         - name: ghcr-secret
