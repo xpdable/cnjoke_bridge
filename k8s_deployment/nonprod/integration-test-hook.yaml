@@ -8,9 +8,12 @@ metadata:
 spec:
   template:
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: integration-test
           image: ghcr.io/xpdable/xp_cnjoke-test:latest
+          imagePullPolicy: Always
           env:
             - name: BASE_URL
               value: http://xp-cnjoke.xp-nonprod.svc.cluster.local:8000
