@@ -4,5 +4,5 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 RUN pip install pytest requests pytest-asyncio
 COPY tests/integration ./tests/integration
-COPY tests.ini .
+COPY pytest.ini .
 CMD ["pytest", "-m", "integration", "--disable-warnings"]
