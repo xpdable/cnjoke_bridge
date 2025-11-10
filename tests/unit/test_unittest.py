@@ -5,21 +5,24 @@ from app.main import app
 
 client = TestClient(app)
 
-@pytest.mark.unit
-@patch("httpx.AyncClient.get")
-def test_home(mock_get):
+@pytest.mark.asyncio
+@patch("main.httpx.AsyncClient")
+async def test_home(mock_async_client):
+    # mock response
     mock_response = AsyncMock()
-    mock_response.json.return_value = {
-        "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-        "id": "test_id",
-        "url": "https://api.chucknorris.io/jokes/test_id",
-        "value": "Chuck Norris can divide by zero."
-    }
-    mock_get.return_value = mock_response
+    mock_response.json.return_value = {"value": "This is a Chuck Norris joke"}
 
+    # mock client
+    mock_client_instance = AsyncMock()
+    mock_client_instance.get.return_value = mock_response
+    mock_async_client.return_value.__aenter__.return_value = mock_client_instance
+
+    # Test
     response = client.get("/")
+
+    # Assert
     assert response.status_code == 200
-    assert "Chuck Norris can divide by zero." in response.text
+    assert "This is a Chuck Norris joke" in response.text
 
 @pytest.mark.unit
 def test_health():
