@@ -6,7 +6,8 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-22.04-arm
+#    runs-on: ubuntu-22.04-arm
+    runs-on: [ self-hosted, ARM64, macOS ]
 
     steps:
     - name: Checkout repository
