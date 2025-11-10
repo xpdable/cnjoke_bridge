@@ -208,7 +208,7 @@ The failed integration test will indicate ArgoCD to degraded status.
 
 -----
 
-### Improve Possibilities
+### Improvement Possibilities
 
 #### GO TO CLOUD NATIVE !!!
 #### GO TO CLOUD NATIVE !!!
