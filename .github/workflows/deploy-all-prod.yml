@@ -29,7 +29,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Delete existing Kind cluster
-      run: kind delete cluster --name cnjoke-cluster || true
+      run: kind delete cluster --name cnjoke-cluster-prod || true
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -47,7 +47,7 @@ jobs:
       run: terraform -chdir=$TERRAFORM_DIR apply -auto-approve -input=false
 
     - name: Init Kind Cluster
-      run: kubectl config use-context kind-cnjoke-cluster
+      run: kubectl config use-context kind-cnjoke-cluster-prod
 
     - name: Create ghcr.io secret
       run: |
