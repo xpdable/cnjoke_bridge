@@ -3,3 +3,4 @@ httpx==0.28.1
 Jinja2==3.1.6
 pytest==8.4.2
 uvicorn==0.38.0
+python_multipart==0.0.20
