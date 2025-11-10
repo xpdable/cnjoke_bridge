@@ -165,6 +165,10 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ⚠️Currently the default ArgoCD application setting is auto-sync off, therefore you do need login to ArgoCD to 1st synchronize the application to deploy it to the Kind cluster.
 Then you can setup auto-sync, healing as well for the next releases.
 
+![argocd](docs/argocd.png)
+
+![app](docs/homepage.png)
+
 -----
 
 ### Application
@@ -226,3 +230,14 @@ CI tools can be also chose to replace Github Action in the cloud.
 Think about separate the application version and infrastructure version:
 - via multiple branches: each representing an environment, promotion only allowed via automation.
 - via multiple repos: CI pipeline inject version to render the manifests templates to a solid ArgoCD manifest syncup url.
+
+#### Monitoring
+Possible to deploy Prometheus and Grafana to monitor the Kind cluster and application performance.
+Possible to deploy synthetic test to health check endpoint.
+
+#### Performance
+Hard limit on Podman machine resource allocation, and local macos hardware limitation.
+Also, the latest industry myth: Is Kubernetes still a silver bullet? 
+Especially, for simple applications, is it too heavy?
+
+![k8s](docs/k8s.png)
