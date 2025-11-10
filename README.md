@@ -3,6 +3,7 @@ A bridge to Chuck Norris jokes
 
 Just get started [here](#get-started) if you are not interested in the trade-off journey.
 
+
 ## The Trade-off Journey
 
 ### 0.Challenges
