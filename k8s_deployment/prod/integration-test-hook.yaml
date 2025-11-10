@@ -16,6 +16,6 @@ spec:
           imagePullPolicy: Always
           env:
             - name: BASE_URL
-              value: http://xp-cnjoke.xp-prod.svc.cluster.local:8000
+              value: http://xp-cnjoke-service.xp-prod.svc.cluster.local:8000
       restartPolicy: Never
   backoffLimit: 1
