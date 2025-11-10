@@ -2,11 +2,11 @@ name: "[CD][Non-Prod]Deploy Kind Cluster, ArgoCD, and Application"
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Image version tag (optional). If empty, value from version.txt will be used'
-        required: false
-        default: ''
+#    inputs:
+#      version:
+#        description: 'Image version tag (optional). If empty, value from version.txt will be used'
+#        required: false
+#        default: ''
 
 env:
   TERRAFORM_DIR: terraform/nonprod

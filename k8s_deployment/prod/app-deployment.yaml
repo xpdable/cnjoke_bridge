@@ -23,7 +23,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: xp-cnjoke
-          image: ghcr.io/xpdable/xp_cnjoke:0.0.1
+          image: ghcr.io/xpdable/xp_cnjoke:0.0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
