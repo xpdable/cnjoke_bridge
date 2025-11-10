@@ -13,7 +13,7 @@ Just get started [here](#get-started) if you are not interested in the trade-off
 ### 1.Possibilities:
 
 - 1.0. Existing Possible Env
-   - Macbook M1 + Podman + Kind
+   - Macbook M1 + [Podman](https://podman.io/) + [Kind - k8s in docker](https://kind.sigs.k8s.io/)
    - Windows11
    - NAS Linux/GNU Synology + Docker
 
@@ -68,7 +68,7 @@ Fesible but complex setup for certificate, and runner image setup including terr
 
   c) ❌Linux ARM64 Docker Runner in Kind
 
-Not feasible as a Kind Cluster is considered as part of IaC deliveable.
+Not feasible as a Kind Cluster is considered as part of IaC deliverable.
 ```bash
   - macos
   |- Podman
@@ -168,9 +168,14 @@ Then you can setup auto-sync, healing as well for the next releases.
 -----
 
 ### Application
-With FastAPI python framework, a html page is rendered with a Chuck Norris joke grabbed from a public API.
+With [FastAPI](https://fastapi.tiangolo.com/) python framework, a html page is rendered with a Chuck Norris joke grabbed from a public API.
 The application, html template and style are in folder `app`.
 Corresponding tests are in folder `tests`.
+
+#### Features
+- Get a random Chuck Norris joke
+- Get a random Chuck Norris joke in selected category
+- Search a Chuck Norris joke by keyword
 
 ### Application Deployment and Continuous Integration
 `Dockerfile` is build for the application image.
@@ -178,9 +183,9 @@ Corresponding tests are in folder `tests`.
 These two images are built and pushed to Github Container Registry in the `[CI]` pipelines.
 
 ### Infrastructure as Code and Continuous Deployment
-Terraform is used for IaC to deploy the application to a Kind cluster in Podman. 
-A Kind provider is introduced to create and manage the Kind cluster from active terraform community.
-ArgoCD is used for GitOps style deployment of the application to the Kind cluster.
+[Terraform](https://developer.hashicorp.com/terraform) is used for IaC to deploy the application to a Kind cluster in Podman. 
+[A Kind provider](https://registry.terraform.io/providers/tehcyx/kind/latest) is introduced to create and manage the Kind cluster from active terraform community.
+[ArgoCD](https://argo-cd.readthedocs.io/en/stable/) is used for GitOps style deployment of the application to the Kind cluster.
 ArgoCD aims to maintain the application in high availability with zero-downtime deployment strategy.
 Application deployment manifests follows GitOps approach and are stored in folder `k8s-deployment`.
 An ArgoCD application is created post Kind cluster creation to monitor the `k8s-deployment` folder and deploy the application to the Kind cluster.
