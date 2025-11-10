@@ -12,7 +12,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: integration-test
-          image: ghcr.io/xpdable/xp_cnjoke-test:latest
+          image: ghcr.io/xpdable/xp_cnjoke_test:latest
           imagePullPolicy: Always
           env:
             - name: BASE_URL
