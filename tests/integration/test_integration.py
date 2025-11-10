@@ -28,3 +28,17 @@ def test_home():
     r = requests.get(f"{BASE_URL}/")
     assert r.status_code == 200
     assert "Chuck Norris" in r.text
+
+@pytest.mark.integration
+def test_category_view():
+    wait_for_service(f"{BASE_URL}/category?category=dev")
+    r = requests.get(f"{BASE_URL}/category", params={"category": "dev"})
+    assert r.status_code == 200
+    assert "Chuck Norris" in r.text or "dev" in r.text
+
+@pytest.mark.integration
+def test_search_view():
+    wait_for_service(f"{BASE_URL}/search?query=chuck")
+    r = requests.get(f"{BASE_URL}/search", params={"query": "beer"})
+    assert r.status_code == 200
+    assert "beer" in r.text or "chuck" in r.text

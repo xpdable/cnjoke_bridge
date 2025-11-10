@@ -1,16 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>XP get a Chunk Norris Joke</title>
+    <meta charset="UTF-8" />
+    <title>XP get a Chuck Norris Joke</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+<div class="container">
+    <h1>🤣🤣🤣 XP get a Chuck Norris Joke 🤣🤣🤣</h1>
 
-  <div class="container">
-    <h1>🤣 XP get a Chuck Norris Joke 🤣</h1>
-    <p>{{ joke["value"] }}</p>
-    <button onclick="window.location.reload()">Next</button>
-  </div>
+    {% if joke %}
+    <p>{{ joke.value }}</p>
+    {% if joke.icon_url %}
+    <img src="{{ joke.icon_url }}" alt="icon">
+    {% endif %}
+    {% endif %}
+    <form method="get" action="/">
+        <button type="submit">Next Random</button>
+    </form>
+
+    <hr>
+
+    <section>
+        <h1>🤣🤣🤣 XP Get Joke by Category 🤣🤣🤣</h1>
+        <form method="get" action="/category">
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <!-- Always keep an explicit "All" option if you want -->
+                <option value="">-- choose --</option>
+                {% if categories %}
+                {% for c in categories %}
+                <option value="{{ c | e }}" {% if selected_category == c %}selected{% endif %}>{{ c | e }}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+            <button type="submit">Get Category Joke</button>
+        </form>
+
+        {% if category_joke %}
+        <div class="category-result">
+            <h3>Category: {{ selected_category | e }}</h3>
+            <p>{{ category_joke["value"] }}</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <hr>
+
+    <section>
+        <h1>🤣🤣🤣 XP Search Jokes 🤣🤣🤣</h1>
+        <form method="get" action="/search">
+            <input type="text" name="query" placeholder="Enter keyword..." value="{{ query | e }}" maxlength="120">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if error_msg %}
+        <div class="error">{{ error_msg | e }}</div>
+        {% endif %}
+
+        {% if search_results %}
+        <div class="search-results">
+            <h3>Found {{ search_results.total }} results</h3>
+            <ul>
+                {% for item in search_results.result %}
+                <li class="search-item">{{ item["value"] }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% elif query %}
+        <p>No results for "{{ query | e }}"</p>
+        {% endif %}
+    </section>
+
+</div>
 </body>
 </html>
