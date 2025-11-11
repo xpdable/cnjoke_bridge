@@ -85,7 +85,31 @@ Not feasible as a Kind Cluster is considered as part of IaC deliverable.
 ### Overall Architecture
 ![architecture](./docs/arch.drawio.png)
 
-### Quick Start
+### Quick Start only the application locally
+The application is built on FastAPI python framework, to run it locally with `uvicorn`:
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+You will see the application logs:
+```bash
+# Will be same as docker logs
+~  uvicorn app.main:app --reload                                                                    ✔  19:30:29
+INFO:     Will watch for changes in these directories: ['/xp/cnjoke_bridge']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [22025] using StatReload
+INFO:     Started server process [22027]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53597 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53597 - "GET /static/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53597 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53597 - "GET /category?category=career HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53597 - "GET /search?query=test HTTP/1.1" 200 OK
+```
+
+### Quick Start with full CI/CD solution with IaC
 ⚠️If and only if you have also same setup in macos with M1 chipset, running Podman and Kind locally.
 0) Install and start Podman machine
 
@@ -235,6 +259,8 @@ Think about separate the application version and infrastructure version:
 #### Monitoring
 Possible to deploy Prometheus and Grafana to monitor the Kind cluster and application performance.
 Possible to deploy synthetic test to health check endpoint.
+More rich and pretty formated logs.
+Possible to investigate metrics in FastAPI.
 
 #### Performance
 Hard limit on Podman machine resource allocation, and local macos hardware limitation.
